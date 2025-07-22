@@ -70,13 +70,26 @@
                     <a href="#process-section" class="hover:text-blue-400 transition-colors text-lg font-medium">Ako to funguje</a>
                     <a href="#contact" class="hover:text-blue-400 transition-colors text-lg font-medium">Kontakt</a>
                 </nav>
-                <button class="md:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
                 </button>
             </div>
         </header>
+        
+        <!-- Mobilné menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-t border-gray-800">
+            <div class="container mx-auto px-6 py-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="#choices" class="text-white hover:text-blue-400 transition-colors text-lg font-medium py-2" onclick="closeMobileMenu()">Spôsoby použitia</a>
+                    <a href="#comparison" class="text-white hover:text-blue-400 transition-colors text-lg font-medium py-2" onclick="closeMobileMenu()">Porovnanie</a>
+                    <a href="#calculator" class="text-white hover:text-blue-400 transition-colors text-lg font-medium py-2" onclick="closeMobileMenu()">Kalkulačka</a>
+                    <a href="#process-section" class="text-white hover:text-blue-400 transition-colors text-lg font-medium py-2" onclick="closeMobileMenu()">Ako to funguje</a>
+                    <a href="#contact" class="text-white hover:text-blue-400 transition-colors text-lg font-medium py-2" onclick="closeMobileMenu()">Kontakt</a>
+                </nav>
+            </div>
+        </div>
     </div>
 
     <div class="bg-gray-900 text-white pt-32">
@@ -816,6 +829,39 @@
                 headerDiv.classList.remove('mb-16');
                 headerDiv.classList.add('mb-8');
             }
+        }
+
+        // Funkcia na prepínanie mobilného menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const isHidden = mobileMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                // Zmena ikony na X
+                menuIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                `;
+            } else {
+                mobileMenu.classList.add('hidden');
+                // Zmena ikony späť na hamburger
+                menuIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                `;
+            }
+        }
+
+        // Funkcia na zatvorenie mobilného menu
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            
+            mobileMenu.classList.add('hidden');
+            // Zmena ikony späť na hamburger
+            menuIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            `;
         }
 
         // Inicializácia - zobrazenie prvej kalkulačky
