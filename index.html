@@ -42,6 +42,14 @@
         input:focus {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        section[id] {
+            scroll-margin-top: 100px;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -50,18 +58,20 @@
         <header class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <svg class="h-10 w-auto" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Euro symbol in rounded rectangle -->
-                        <rect x="2" y="8" width="24" height="24" rx="4" stroke="white" stroke-width="2" fill="none"/>
-                        <text x="14" y="24" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">€</text>
-                        
-                        <!-- Orange circle with percentage -->
-                        <circle cx="20" cy="26" r="8" fill="#FF6B35"/>
-                        <text x="20" y="29" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">%</text>
-                        
-                        <!-- Transakcio.sk text -->
-                        <text x="45" y="24" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="white">Transakcio.sk</text>
-                    </svg>
+                    <a href="#" onclick="scrollToTop()" class="cursor-pointer">
+                        <svg class="h-10 w-auto" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Euro symbol in rounded rectangle -->
+                            <rect x="2" y="8" width="24" height="24" rx="4" stroke="white" stroke-width="2" fill="none"/>
+                            <text x="14" y="24" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">€</text>
+                            
+                            <!-- Orange circle with percentage -->
+                            <circle cx="20" cy="26" r="8" fill="#FF6B35"/>
+                            <text x="20" y="29" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">%</text>
+                            
+                            <!-- Transakcio.sk text -->
+                            <text x="45" y="24" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="white">Transakcio.sk</text>
+                        </svg>
+                    </a>
                 </div>
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="#choices" class="hover:text-blue-400 transition-colors text-lg font-medium">Spôsoby použitia</a>
@@ -256,7 +266,7 @@
     </section>
 
     <!-- Spôsoby fungovania -->
-    <section class="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <section id="choices" class="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto">
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">Transakcio funguje dvoma spôsobmi</h2>
@@ -388,7 +398,7 @@
     </section>
 
     <!-- Detailné porovnanie služieb -->
-    <section class="py-12 bg-gray-50">
+    <section id="comparison" class="py-12 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-8">
                 <button onclick="toggleComparison()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
@@ -495,7 +505,7 @@
     </section>
 
     <!-- Ako presne služba funguje -->
-    <section class="py-12 bg-white">
+    <section id="process-section" class="py-12 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto mb-8">
                 <button onclick="toggleProcess()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
@@ -864,6 +874,14 @@
             `;
         }
 
+        // Funkcia na scroll na vrch stránky
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
         // Inicializácia - zobrazenie prvej kalkulačky
         document.addEventListener('DOMContentLoaded', function() {
             switchTab('check');
@@ -871,7 +889,7 @@
     </script>
 
     <!-- Kontaktná sekcia -->
-    <section class="pt-20 pb-0 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="contact" class="pt-20 pb-0 bg-gradient-to-br from-gray-50 to-blue-50">
         <div class="container mx-auto px-6">
                         <div class="text-center mb-12">
                 <h2 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Začnite šetriť už dnes</h2>
