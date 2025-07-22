@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transakcia - Ušetrite na transakčnej dani</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .calculator-content {
+            display: none;
+        }
+        
+        .calculator-content.active {
+            display: block;
+        }
+        
+        .calculator-tab.active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+        
+        .results {
+            animation: fadeInUp 0.4s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        input:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <div class="bg-gray-900 text-white fixed top-0 left-0 right-0 z-50">
+        <header class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="h-10 w-auto" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Euro symbol in rounded rectangle -->
+                        <rect x="2" y="8" width="24" height="24" rx="4" stroke="white" stroke-width="2" fill="none"/>
+                        <text x="14" y="24" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">€</text>
+                        
+                        <!-- Orange circle with percentage -->
+                        <circle cx="20" cy="26" r="8" fill="#FF6B35"/>
+                        <text x="20" y="29" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">%</text>
+                        
+                        <!-- Transakcio.sk text -->
+                        <text x="45" y="24" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="white">Transakcio.sk</text>
+                    </svg>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#choices" class="hover:text-blue-400 transition-colors text-lg font-medium">Spôsoby použitia</a>
+                    <a href="#comparison" class="hover:text-blue-400 transition-colors text-lg font-medium">Porovnanie</a>
+                    <a href="#calculator" class="hover:text-blue-400 transition-colors text-lg font-medium">Kalkulačka</a>
+                    <a href="#process-section" class="hover:text-blue-400 transition-colors text-lg font-medium">Ako to funguje</a>
+                    <a href="#contact" class="hover:text-blue-400 transition-colors text-lg font-medium">Kontakt</a>
+                </nav>
+                <button class="md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <div class="bg-gray-900 text-white pt-32">
+        <main class="container mx-auto px-6 pt-16 pb-32">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight">Ušetrite na transakčnej dani</h1>
+                    <p class="mt-6 text-gray-400">100% legálne riešenie pre všetky firmy a SZČO na Slovensku. Platby poštovými poukážkami sú oslobodené od transakčnej dane.</p>
+                    <div class="mt-8">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg">Vyberte spôsob šetrenia</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="bg-white rounded-2xl p-6 transform -rotate-6 text-gray-800">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="font-semibold mt-2 block">Poštový poukaz</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <p class="text-sm">Suma</p>
+                            <p class="text-3xl font-bold mt-1">1 234,56 €</p>
+                            <div class="mt-4 text-xs space-y-1">
+                                <p><span class="font-semibold">Od:</span> Vaša Firma s.r.o.</p>
+                                <p><span class="font-semibold">Pre:</span> Príjemca platby</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Kalkulačka úspor -->
+    <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Kalkulačka úspor</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">Vypočítajte si vašu čistú úsporu po odpočítaní všetkých nákladov</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Tabs -->
+                <div class="flex bg-gray-100 rounded-2xl p-2 mb-12">
+                    <button id="check-tab" class="flex-1 py-4 px-8 rounded-xl font-semibold text-gray-700 transition-all duration-300 calculator-tab active" onclick="switchTab('check')">
+                        Šeková služba
+                    </button>
+                    <button id="batch-tab" class="flex-1 py-4 px-8 rounded-xl font-semibold text-gray-700 transition-all duration-300 calculator-tab" onclick="switchTab('batch')">
+                        Dávková služba
+                    </button>
+                </div>
+
+                <!-- Šeková kalkulačka -->
+                <div id="check-calculator" class="calculator-content active">
+                    <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <label for="check-transactions" class="block font-semibold mb-3 text-gray-900">Počet mesačných úhrad</label>
+                                <input type="number" id="check-transactions" placeholder="Napríklad 50" min="1" 
+                                       class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                            <div>
+                                <label for="check-avgAmount" class="block font-semibold mb-3 text-gray-900">Priemerná suma úhrady (€)</label>
+                                <input type="number" id="check-avgAmount" placeholder="Napríklad 2000" min="1" max="15000" 
+                                       class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                        </div>
+                        <button onclick="calculateCheckSavings()" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-sm">
+                            Vypočítať úsporu
+                        </button>
+
+                        <div id="check-results" class="results hidden mt-12 bg-gray-50 border border-gray-200 rounded-2xl p-8">
+                            <h3 class="text-2xl font-bold mb-8 text-center text-gray-900">Vaša čistá mesačná úspora</h3>
+                            <div class="text-5xl font-bold text-center mb-12 text-blue-600" id="check-savingsAmount">0 €</div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Transakčná daň bez služby:</span>
+                                    <strong class="text-gray-900" id="check-taxWithout">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Náklady na poštové poukážky:</span>
+                                    <strong class="text-gray-900" id="check-costWith">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Hrubá úspora:</span>
+                                    <strong class="text-gray-900" id="check-grossSavings">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Servisný poplatok (15% z úspory, min. 29 €):</span>
+                                    <strong class="text-gray-900" id="check-serviceFee">0 €</strong> <span class="text-sm text-gray-500">bez DPH</span>
+                                </div>
+                                <div class="pt-4 mt-4 border-t-2 border-gray-300">
+                                    <div class="flex justify-between items-center text-lg">
+                                        <span class="font-semibold text-gray-900">Čistá ročná úspora:</span>
+                                        <strong class="text-2xl text-green-600" id="check-yearlySavings">0 €</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dávková kalkulačka -->
+                <div id="batch-calculator" class="calculator-content">
+                    <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+                        <div class="grid md:grid-cols-3 gap-8 mb-8">
+                            <div>
+                                <label for="batch-batches" class="block font-semibold mb-3 text-gray-900">Počet dávok mesačne</label>
+                                <input type="number" id="batch-batches" placeholder="Napríklad 4" min="1" 
+                                       class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                            <div>
+                                <label for="batch-invoicesPerBatch" class="block font-semibold mb-3 text-gray-900">Priemerný počet faktúr na dávku</label>
+                                <input type="number" id="batch-invoicesPerBatch" placeholder="Napríklad 25" min="1" 
+                                       class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                            <div>
+                                <label for="batch-avgAmount" class="block font-semibold mb-3 text-gray-900">Priemerná suma faktúry (€)</label>
+                                <input type="number" id="batch-avgAmount" placeholder="Napríklad 2000" min="1" max="15000" 
+                                       class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                        </div>
+                        <button onclick="calculateBatchSavings()" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-sm">
+                            Vypočítať úsporu
+                        </button>
+
+                        <div id="batch-results" class="results hidden mt-12 bg-gray-50 border border-gray-200 rounded-2xl p-8">
+                            <h3 class="text-2xl font-bold mb-8 text-center text-gray-900">Vaša čistá mesačná úspora</h3>
+                            <div class="text-5xl font-bold text-center mb-12 text-blue-600" id="batch-savingsAmount">0 €</div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Transakčná daň bez služby:</span>
+                                    <strong class="text-gray-900" id="batch-taxWithout">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Náklady na poštové poukážky + optimalizovaná transakčná daň:</span>
+                                    <strong class="text-gray-900" id="batch-costWith">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Hrubá úspora:</span>
+                                    <strong class="text-gray-900" id="batch-grossSavings">0 €</strong>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                    <span class="text-gray-700">Servisný poplatok (15% z úspory, min. 29 €):</span>
+                                    <strong class="text-gray-900" id="batch-serviceFee">0 €</strong> <span class="text-sm text-gray-500">bez DPH</span>
+                                </div>
+                                <div class="pt-4 mt-4 border-t-2 border-gray-300">
+                                    <div class="flex justify-between items-center text-lg">
+                                        <span class="font-semibold text-gray-900">Čistá ročná úspora:</span>
+                                        <strong class="text-2xl text-green-600" id="batch-yearlySavings">0 €</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spôsoby fungovania -->
+    <section class="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">Transakcio funguje dvoma spôsobmi</h2>
+                <div class="space-y-6">
+                    <p class="text-xl text-gray-600 leading-relaxed">Vyberte si spôsob, ktorý najlepšie vyhovuje vašim potrebám a preferenciám.</p>
+                    <div class="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-6 py-3">
+                        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-green-800 font-semibold">Oba spôsoby sú legálne a prinášajú značné úspory na transakčnej dani</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dve možnosti služieb -->
+            <div class="grid md:grid-cols-2 gap-8 mt-16">
+                <!-- Spôsob 1: Šeková služba -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-10">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-2xl mb-6">
+                            <svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-3">Šeky a platba kartou na pošte</h3>
+                        <p class="text-lg text-gray-600">Automatizované generovanie šekov</p>
+                    </div>
+                    
+                    <div class="mb-10">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-6">Výhody</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Úspora celej transakčnej dane</strong> - až 40 € na transakciu</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Okamžité riešenie</strong> - funguje hneď od prvého dňa</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Vhodné pre menšie firmy</strong>, napr. na úhradu výplat</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Jednoduché nahranie PDF faktúr</strong> do systému</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-10">
+                        <button onclick="toggleLimits('check-limits')" class="w-full text-left flex items-center justify-between py-4 border-t border-gray-200 hover:bg-gray-50 rounded-lg px-4 transition-colors">
+                            <h4 class="text-xl font-semibold text-gray-900">Tento spôsob má aj svoje limity</h4>
+                            <svg id="check-limits-arrow" class="w-6 h-6 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="check-limits-content" class="hidden pl-4">
+                            <ul class="space-y-3 text-gray-600 text-lg">
+                                <li>- Nutnosť chodiť osobne na poštu</li>
+                                <li>- Obmedzené limitom platobnej karty</li>
+                                <li>- Náročnejšia identifikácia platby pre dodávateľov</li>
+                                <li>- Príjemca dostane doklad k identifikácii prijatej platby až pár dní po úhrade</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-lg">
+                        Chcem šekovú službu
+                    </button>
+                </div>
+                
+                <!-- Spôsob 2: Dávková služba -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-10">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-2xl mb-6">
+                            <svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-3">Elektronické dávkové platby</h3>
+                        <p class="text-lg text-gray-600">Pohodlné platby cez internet</p>
+                    </div>
+                    
+                    <div class="mb-10">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-6">Výhody</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Nemusíte chodiť na poštu</strong> - všetko online</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Výrazná úspora</strong> na transakčnej dani</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Jednoduchá a pohodlná realizácia</strong> úhrady cez internet</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
+                                <span class="text-gray-700 text-lg"><strong>Ideálne pre veľké počty faktúr</strong> (v desiatkach)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-10">
+                        <button onclick="toggleLimits('batch-limits')" class="w-full text-left flex items-center justify-between py-4 border-t border-gray-200 hover:bg-gray-50 rounded-lg px-4 transition-colors">
+                            <h4 class="text-xl font-semibold text-gray-900">Tento spôsob má aj svoje limity</h4>
+                            <svg id="batch-limits-arrow" class="w-6 h-6 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="batch-limits-content" class="hidden pl-4">
+                            <ul class="space-y-3 text-gray-600 text-lg">
+                                <li>- Náročnejší úvodný setup (zmluva, nastavenie komunikačného kanálu, šifrovanie), ale s nami to zvládnete</li>
+                                <li>- Čiastočná úhrada transakčnej dane (max. však 40 € za dávku bez ohľad na počet faktúr)</li>
+                                <li>- Plánovanie platieb (nejde o okamžitú platbu)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-lg">
+                        Chcem dávkovú službu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailné porovnanie služieb -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8">
+                <button onclick="toggleComparison()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mr-4">Detailné porovnanie služieb</h2>
+                    <svg id="comparison-arrow" class="w-8 h-8 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-6">Porovnajte si oba spôsoby a vyberte si ten, ktorý najlepšie vyhovuje vašim potrebám</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto">
+                <div id="comparison-content" class="hidden">
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-900 text-white">
+                                        <th class="py-8 px-8 text-left font-semibold text-xl">Vlastnosť</th>
+                                        <th class="py-8 px-8 text-center font-semibold text-xl">Šeková služba</th>
+                                        <th class="py-8 px-8 text-center font-semibold text-xl">Dávková služba</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700">
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Úspora transakčnej dane</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">100% úspora (až 40 € na transakciu)</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Čiastočná úspora (max. 40 € za dávku)</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Nutnosť chodiť na poštu</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Áno, pre každú platbu</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">Nie, všetko online</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Počiatočné nastavenie</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">Žiadne, funguje hneď</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Zmluva s poštou (jednorazovo)</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Vhodné pre výplaty</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Vhodné</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">Výborné</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Vhodné pre dodávateľov</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Obmedzene</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">Výborné</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Limit na dávku</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Limit platobnej karty</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg font-semibold">Bez limitu</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Automatizácia</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Čiastočná (generovanie šekov)</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Plná (<span class="font-semibold">SFTP + auto-dávky</span>)</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="py-8 px-8 font-semibold text-lg border-r border-gray-200">Cieľová skupina</td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Klienti ochotní chodiť na poštu s maximálnou úsporou na transakčnej dani</span>
+                                        </td>
+                                        <td class="py-8 px-8 text-center">
+                                            <span class="text-lg">Firmy s veľkým počtom transakcií a výrazným šetrením na transakčnej dani</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ako presne služba funguje -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-4xl mx-auto mb-8">
+                <button onclick="toggleProcess()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-0 mr-4">Ako presne služba funguje</h2>
+                    <svg id="process-arrow" class="w-8 h-8 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <p class="text-xl text-gray-600 leading-relaxed mt-6">Pozrite si detailný postup pre oba spôsoby fungovania našej služby</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto">
+                <div id="process-content" class="hidden">
+                    <!-- Dve možnosti procesov -->
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Šeková služba -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
+                            <div class="text-center mb-10">
+                                <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-2xl mb-6">
+                                    <svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-900 mb-3">Šeková služba</h3>
+                                <p class="text-lg text-gray-600">(pre maximálnu úsporu dane)</p>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                    Táto cesta je ideálna pre tých, ktorí chcú ušetriť celú transakčnú daň a sú ochotní navštíviť poštu. Je najvýhodnejšia pre platby od 700 € do 15 000 € a je zvlášť vhodná pre úhradu nájmov alebo výplat.
+                                </p>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Nahranie platieb do systému</h4>
+                                        <p class="text-gray-700 text-lg">Zákazník jednoducho nahrá údaje o faktúrach alebo výplatách do systému Transakcio vo formáte PDF alebo ako naskenované dokumenty. Systém dokáže vyťažiť potrebné dáta z faktúr.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Generovanie a tlač poštových poukážok</h4>
+                                        <p class="text-gray-700 text-lg">Systém automaticky vygeneruje a vyplní poštové poukážky (šeky) jedným klikom. Tieto poukážky si zákazník následne vytlačí zo svojho počítača.</p>
+                                        <p class="text-gray-600 text-lg mt-2"><strong>Dôležité:</strong> Variabilný symbol (VS) môže byť uvedený v poznámke priamo na šeku, aby prijímateľ platby vedel, o čo ide.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Platba na pošte</h4>
+                                        <p class="text-gray-700 text-lg">Zákazník uhrádza vygenerované poukážky platobnou kartou na ktorejkoľvek pobočke Slovenskej pošty.</p>
+                                        <p class="text-gray-600 text-lg mt-2"><strong>Výhoda:</strong> Pri platbe kartou na pošte nevzniká transakčná daň.</p>
+                                        <p class="text-gray-600 text-lg"><strong>Obmedzenie:</strong> Platba je limitovaná výškou limitu platobnej karty.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">4</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Doručenie platby príjemcovi</h4>
+                                        <p class="text-gray-700 text-lg">Príjemca dostane platbu a list s variabilným symbolom od pošty. Hoci sa môže stať, že dodatočný papier sa stratí, variabilný symbol na šeku pomáha s identifikáciou.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dávková služba -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
+                            <div class="text-center mb-10">
+                                <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-2xl mb-6">
+                                    <svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-900 mb-3">Elektronické dávkové platby</h3>
+                                <p class="text-lg text-gray-600">(pre pohodlie bez návštevy pošty)</p>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                    Táto cesta je určená pre klientov, ktorí nechcú chodiť na poštu a preferujú maximálne pohodlie. Transakčná daň je tu limitovaná na maximálne 40 € bez ohľadu na výšku platby alebo počet faktúr v dávke.
+                                </p>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-4 mt-1">
+                                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xl font-semibold text-gray-900 mb-2">Úvodný setup (jednorázovo)</h4>
+                                            <p class="text-gray-700 text-lg">S pomocou Transakcio.sk si klient vytvorí elektronickú zmluvu so Slovenskou poštou. Tento proces je jednorazový úkon, ktorý sa deje iba raz a Transakcio.sk s ním pomôže.</p>
+                                            <p class="text-gray-700 text-lg mt-2">Po podpise zmluvy si klient v administrácii Transakcio.sk nastaví prístupy k SFTP, ktoré dostane od pošty. Akonáhle klient podpíše svoju elektronickú zmluvu, nastaví si u nás v admine meno a heslo toho SFTP prístupu, ktorý dostane od pošty. Tým pádom náš systém dokáže automaticky nahrávať vygenerovaný súbor (dávku) v mene klienta.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Nahranie platieb a generovanie dávky</h4>
+                                        <p class="text-gray-700 text-lg">Zákazník nahrá faktúry alebo iné PDF dokumenty do systému Transakcio.sk. Namiesto šekov systém Transakcio.sk vytvorí zakryptovanú elektronickú dávku platieb.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Automatické odoslanie dávky na poštu</h4>
+                                        <p class="text-gray-700 text-lg">Transakcio.sk odošle túto dávku na poštu verifikovaným emailom alebo prostredníctvom zabezpečeného SFTP pripojenia.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                        <span class="text-blue-600 font-bold text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-gray-900 mb-2">Úhrada dávky prostredníctvom internet bankingu</h4>
+                                        <p class="text-gray-700 text-lg">Transakcio.sk zároveň pošle klientovi pokyny na úhradu (účty, sumy, variabilné symboly). Klient následne vykoná platbu jednoduchým skopírovaním týchto dát do svojho internet bankingu.</p>
+                                        <p class="text-gray-600 text-lg mt-2"><strong>Výhoda:</strong> Klient nemusí chodiť na poštu.</p>
+                                        <p class="text-gray-600 text-lg"><strong>Charakteristika:</strong> Hoci nešetrí celú transakčnú daň (poplatok je max. 40 €), je to výrazná úspora pre hromadné platby (napríklad 10, 20, 30 alebo 50 faktúr v jednej dávke).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Funkcia na zobrazenie vlastných notifikácií
+        function showNotification(message, type = 'error') {
+            // Vytvorenie notifikácie
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-6 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full`;
+            
+            if (type === 'error') {
+                notification.className += ' bg-red-50 border border-red-200 text-red-800';
+                notification.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="font-medium">${message}</span>
+                    </div>
+                `;
+            } else {
+                notification.className += ' bg-green-50 border border-green-200 text-green-800';
+                notification.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="font-medium">${message}</span>
+                    </div>
+                `;
+            }
+            
+            // Pridanie do DOM
+            document.body.appendChild(notification);
+            
+            // Animácia zobrazenia
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Automatické odstránenie po 4 sekundách
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 4000);
+        }
+
+        // Funkcia na prepínanie tabov
+        function switchTab(tabName) {
+            // Skryjeme všetky kalkulačky
+            document.querySelectorAll('.calculator-content').forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            // Odstránime active class zo všetkých tabov
+            document.querySelectorAll('.calculator-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Zobrazíme vybranú kalkulačku
+            document.getElementById(tabName + '-calculator').classList.add('active');
+            document.getElementById(tabName + '-calculator').style.display = 'block';
+            
+            // Pridáme active class na vybraný tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Funkcia na výpočet úspor pre šekovú službu
+        function calculateCheckSavings() {
+            const transactions = parseInt(document.getElementById('check-transactions').value) || 0;
+            const avgAmount = parseFloat(document.getElementById('check-avgAmount').value) || 0;
+            
+            if (transactions === 0 || avgAmount === 0) {
+                showNotification('Prosím vyplňte všetky polia pre výpočet úspor');
+                return;
+            }
+            
+            // Výpočty podľa logiky z pôvodného kódu
+            const totalAmount = transactions * avgAmount;
+            const taxWithout = Math.min(totalAmount * 0.005, 40 * transactions); // 0.5% transakčná daň, max 40€ na transakciu
+            const costWith = transactions * 0.58; // Náklady na poštové poukážky
+            const grossSavings = taxWithout - costWith;
+            const serviceFee = Math.max(grossSavings * 0.15, 29); // 15% z úspory, min. 29€
+            const netSavings = grossSavings - serviceFee;
+            const yearlySavings = netSavings * 12;
+            
+            // Zobrazenie výsledkov
+            document.getElementById('check-taxWithout').textContent = taxWithout.toFixed(2) + ' €';
+            document.getElementById('check-costWith').textContent = costWith.toFixed(2) + ' €';
+            document.getElementById('check-grossSavings').textContent = grossSavings.toFixed(2) + ' €';
+            document.getElementById('check-serviceFee').textContent = serviceFee.toFixed(2) + ' €';
+            document.getElementById('check-savingsAmount').textContent = netSavings.toFixed(2) + ' €';
+            document.getElementById('check-yearlySavings').textContent = yearlySavings.toFixed(2) + ' €';
+            
+            // Zobrazenie výsledkov
+            document.getElementById('check-results').classList.remove('hidden');
+        }
+
+        // Funkcia na výpočet úspor pre dávkovú službu
+        function calculateBatchSavings() {
+            const batches = parseInt(document.getElementById('batch-batches').value) || 0;
+            const invoicesPerBatch = parseInt(document.getElementById('batch-invoicesPerBatch').value) || 0;
+            const avgAmount = parseFloat(document.getElementById('batch-avgAmount').value) || 0;
+            
+            if (batches === 0 || invoicesPerBatch === 0 || avgAmount === 0) {
+                showNotification('Prosím vyplňte všetky polia pre výpočet úspor');
+                return;
+            }
+            
+            // Výpočty podľa logiky z pôvodného kódu
+            const totalTransactions = batches * invoicesPerBatch;
+            const totalAmount = totalTransactions * avgAmount;
+            const taxWithout = Math.min(totalAmount * 0.005, 40 * totalTransactions); // 0.5% transakčná daň, max 40€ na transakciu
+            const costWith = batches * 40; // 40€ za dávku
+            const grossSavings = taxWithout - costWith;
+            const serviceFee = Math.max(grossSavings * 0.15, 29); // 15% z úspory, min. 29€
+            const netSavings = grossSavings - serviceFee;
+            const yearlySavings = netSavings * 12;
+            
+            // Zobrazenie výsledkov
+            document.getElementById('batch-taxWithout').textContent = taxWithout.toFixed(2) + ' €';
+            document.getElementById('batch-costWith').textContent = costWith.toFixed(2) + ' €';
+            document.getElementById('batch-grossSavings').textContent = grossSavings.toFixed(2) + ' €';
+            document.getElementById('batch-serviceFee').textContent = serviceFee.toFixed(2) + ' €';
+            document.getElementById('batch-savingsAmount').textContent = netSavings.toFixed(2) + ' €';
+            document.getElementById('batch-yearlySavings').textContent = yearlySavings.toFixed(2) + ' €';
+            
+            // Zobrazenie výsledkov
+            document.getElementById('batch-results').classList.remove('hidden');
+        }
+
+        // Funkcia na prepínanie zobrazenia limitov
+        function toggleLimits(id) {
+            const content = document.getElementById(id + '-content');
+            const arrow = document.getElementById(id + '-arrow');
+            const isHidden = content.classList.contains('hidden');
+
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180'); // Otáča šipku
+        }
+
+        // Funkcia na prepínanie zobrazenia porovnania
+        function toggleComparison() {
+            const content = document.getElementById('comparison-content');
+            const arrow = document.getElementById('comparison-arrow');
+            const headerDiv = content.parentElement.previousElementSibling;
+            const isHidden = content.classList.contains('hidden');
+
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180'); // Otáča šipku
+            
+            // Pridanie/odstránenie spacing podľa stavu
+            if (isHidden) {
+                headerDiv.classList.remove('mb-8');
+                headerDiv.classList.add('mb-16');
+            } else {
+                headerDiv.classList.remove('mb-16');
+                headerDiv.classList.add('mb-8');
+            }
+        }
+
+        // Funkcia na prepínanie zobrazenia procesu
+        function toggleProcess() {
+            const content = document.getElementById('process-content');
+            const arrow = document.getElementById('process-arrow');
+            const headerDiv = content.parentElement.previousElementSibling;
+            const isHidden = content.classList.contains('hidden');
+
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180'); // Otáča šipku
+            
+            // Pridanie/odstránenie spacing podľa stavu
+            if (isHidden) {
+                headerDiv.classList.remove('mb-8');
+                headerDiv.classList.add('mb-16');
+            } else {
+                headerDiv.classList.remove('mb-16');
+                headerDiv.classList.add('mb-8');
+            }
+        }
+
+        // Inicializácia - zobrazenie prvej kalkulačky
+        document.addEventListener('DOMContentLoaded', function() {
+            switchTab('check');
+        });
+    </script>
+
+    <!-- Kontaktná sekcia -->
+    <section class="pt-20 pb-0 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                <h2 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Začnite šetriť už dnes</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">Zanechajte nám svoj email, čoskoro sa vám ozveme s podrobnosťami k službe Transakcio</p>
+                </div>
+            
+                        <div class="max-w-2xl mx-auto mb-12">
+                <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+                    <form class="space-y-6">
+                 <div>
+                            <label for="email" class="block font-semibold mb-3 text-gray-900">E-mail *</label>
+                            <input type="email" id="email" name="email" required 
+                                   class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                   placeholder="vas@email.sk">
+                </div>
+                        
+                 <div>
+                            <label for="message" class="block font-semibold mb-3 text-gray-900">Dodatočné informácie alebo otázky</label>
+                            <textarea id="message" name="message" rows="4" 
+                                      class="w-full border border-gray-300 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                                      placeholder="Napíšte nám, ak máte špecifické požiadavky alebo otázky..."></textarea>
+                </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-sm">
+                            Odoslať
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="h-12 bg-gradient-to-br from-gray-50 to-blue-50"></div>
+        </div>
+    </section>
+
+</body>
+</html> 
