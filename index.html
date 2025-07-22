@@ -50,6 +50,31 @@
         section[id] {
             scroll-margin-top: 100px;
         }
+        
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        #contact {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        body > *:last-child {
+            margin-bottom: 0 !important;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -889,14 +914,14 @@
     </script>
 
     <!-- Kontaktná sekcia -->
-    <section id="contact" class="pt-20 pb-0 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="contact" class="pt-20 pb-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div class="container mx-auto px-6">
-                        <div class="text-center mb-12">
+            <div class="text-center mb-12">
                 <h2 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Začnite šetriť už dnes</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto text-lg">Zanechajte nám svoj email, čoskoro sa vám ozveme s podrobnosťami k službe Transakcio</p>
-                </div>
+            </div>
             
-                        <div class="max-w-2xl mx-auto">
+            <div class="max-w-2xl mx-auto">
                 <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
                     <form class="space-y-6">
                  <div>
