@@ -352,7 +352,7 @@
                             </li>
                             <li class="flex items-start">
                                 <span class="text-gray-900 font-bold mr-4 mt-1 text-lg">✓</span>
-                                <span class="text-gray-700 text-lg"><strong>Jednoduché nahranie PDF faktúr</strong> do systému</span>
+                                <span class="text-gray-700 text-lg"><strong>Jednoduché nahranie faktúr</strong> z účtovacieho systému</span>
                             </li>
                         </ul>
                     </div>
@@ -423,7 +423,7 @@
                         <div id="batch-limits-content" class="hidden pl-4">
                             <ul class="space-y-3 text-gray-600 text-lg">
                                 <li>- Náročnejší úvodný setup (zmluva, nastavenie komunikačného kanálu, šifrovanie), ale s nami to zvládnete</li>
-                                <li>- Čiastočná úhrada transakčnej dane (max. však 40 € za dávku bez ohľad na počet faktúr)</li>
+                                <li>- Čiastočná úhrada transakčnej dane (max. však 40 € za dávku bez ohľadu na počet faktúr)</li>
                                 <li>- Plánovanie platieb (nejde o okamžitú platbu)</li>
                             </ul>
                         </div>
@@ -441,17 +441,12 @@
     <section id="comparison" class="py-12 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-8">
-                <button onclick="toggleComparison()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mr-4">Detailné porovnanie služieb</h2>
-                    <svg id="comparison-arrow" class="w-8 h-8 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Detailné porovnanie služieb</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-6">Porovnajte si oba spôsoby a vyberte si ten, ktorý najlepšie vyhovuje vašim potrebám</p>
             </div>
             
             <div class="max-w-6xl mx-auto">
-                <div id="comparison-content" class="hidden">
+                <div id="comparison-content">
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full">
@@ -544,21 +539,32 @@
         </div>
     </section>
 
+    <!-- CTA Button Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-2xl mx-auto">
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Začnite šetriť už dnes</h3>
+                <p class="text-lg text-gray-600 mb-8">Pripojte sa k stovkám spokojných klientov, ktorí už ušetrili tisíce eur na transakčnej dani</p>
+                <a href="#contact" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-lg">
+                    Kontaktujte nás
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Ako presne služba funguje -->
     <section id="process-section" class="py-12 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto mb-8">
-                <button onclick="toggleProcess()" class="inline-flex items-center justify-center py-6 px-8 border-2 border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-0 mr-4">Ako presne služba funguje</h2>
-                    <svg id="process-arrow" class="w-8 h-8 text-gray-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Ako presne služba funguje</h2>
                 <p class="text-xl text-gray-600 leading-relaxed mt-6">Pozrite si detailný postup pre oba spôsoby fungovania našej služby</p>
             </div>
             
             <div class="max-w-6xl mx-auto">
-                <div id="process-content" class="hidden">
+                <div id="process-content">
                     <!-- Dve možnosti procesov -->
                     <div class="grid md:grid-cols-2 gap-8">
                         <!-- Šeková služba -->
@@ -841,45 +847,7 @@
             arrow.classList.toggle('rotate-180'); // Otáča šipku
         }
 
-        // Funkcia na prepínanie zobrazenia porovnania
-        function toggleComparison() {
-            const content = document.getElementById('comparison-content');
-            const arrow = document.getElementById('comparison-arrow');
-            const headerDiv = content.parentElement.previousElementSibling;
-            const isHidden = content.classList.contains('hidden');
 
-            content.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180'); // Otáča šipku
-            
-            // Pridanie/odstránenie spacing podľa stavu
-            if (isHidden) {
-                headerDiv.classList.remove('mb-8');
-                headerDiv.classList.add('mb-16');
-            } else {
-                headerDiv.classList.remove('mb-16');
-                headerDiv.classList.add('mb-8');
-            }
-        }
-
-        // Funkcia na prepínanie zobrazenia procesu
-        function toggleProcess() {
-            const content = document.getElementById('process-content');
-            const arrow = document.getElementById('process-arrow');
-            const headerDiv = content.parentElement.previousElementSibling;
-            const isHidden = content.classList.contains('hidden');
-
-            content.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180'); // Otáča šipku
-            
-            // Pridanie/odstránenie spacing podľa stavu
-            if (isHidden) {
-                headerDiv.classList.remove('mb-8');
-                headerDiv.classList.add('mb-16');
-            } else {
-                headerDiv.classList.remove('mb-16');
-                headerDiv.classList.add('mb-8');
-            }
-        }
 
         // Funkcia na prepínanie mobilného menu
         function toggleMobileMenu() {
